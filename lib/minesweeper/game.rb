@@ -2,8 +2,8 @@ module MineSweeper
   class Game
     attr_reader :board, :completed
 
-    def initialize(width, height, mines)
-      @board     = Board.new(width, height, mines)
+    def initialize(args = {})
+      @board     = Board.new(args[:width], args[:height], args[:mines])
       @completed = false
     end
 
