@@ -17,6 +17,8 @@ module MineSweeper
     end
 
     def display
+      print erase if @displayed
+
       puts '  ' + (0...width).step(2).map { |file| file % 10 }.to_a.join(' ')
       puts " +#{'-' * width}+"
       height.times do |ycoord|
@@ -28,6 +30,8 @@ module MineSweeper
       end
       puts " +#{'-' * width}+"
       puts '   ' + (1...width).step(2).map { |file| file % 10 }.to_a.join(' ')
+
+      @displayed = true
     end
 
     def toggle_mine(ycoord, xcoord)
@@ -48,6 +52,10 @@ module MineSweeper
         neighbors = neighbors_for(idx / width, idx % width)
         Cell.build_from(predicates, predicate, neighbors)
       end
+    end
+
+    def erase
+      @erase ||= (height + 5).times.map { "#{`tput cuu1`}#{`tput el`}" }.join
     end
 
     def neighbors_for(ycoord, xcoord)
