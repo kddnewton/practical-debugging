@@ -6,7 +6,7 @@ module MineSweeper
       alias_method :clicked?, :clicked
       alias_method :guessed?, :guessed
 
-      def initialize(neighbors)
+      def initialize(neighbors = [])
         @neighbors = neighbors
         @clicked   = false
         @guessed   = false
@@ -33,6 +33,12 @@ module MineSweeper
     end
 
     class MineCell < BaseCell
+      def mine?
+        true
+      end
+
+      private
+
       def after_click(_)
         :lose
       end
@@ -40,13 +46,11 @@ module MineSweeper
       def clicked_display(_)
         'X'
       end
-
-      def mine?
-        true
-      end
     end
 
     class NeighborCell < BaseCell
+      private
+
       def after_click(_)
       end
 
@@ -57,6 +61,8 @@ module MineSweeper
     end
 
     class EmptyCell < BaseCell
+      private
+
       def after_click(board)
         neighbors.each { |neighbor| board.cell_at(neighbor).click(board) }
       end
