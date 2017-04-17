@@ -1,7 +1,10 @@
 module MineSweeper
   class Cell
     attr_reader :button, :mine_count, :mine, :neighbors, :clicked, :guessed
-    %i[clicked guessed mine].each { |method| alias_method :"#{method}?", method }
+
+    %i[clicked guessed mine].each do |method|
+      alias_method :"#{method}?", method
+    end
 
     def initialize(args = {})
       @button     = args[:button]

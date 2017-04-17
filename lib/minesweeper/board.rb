@@ -44,9 +44,12 @@ module MineSweeper
           index      = index_for(ycoord, xcoord)
           neighbors  = neighbors_for(ycoord, xcoord)
 
+          button =
+            TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
+
           Cell.new(
             board:      self,
-            button:     TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) },
+            button:     button,
             mine:       predicates[index],
             mine_count: neighbors.count { |neighbor| predicates[neighbor] },
             neighbors:  neighbors
