@@ -22,8 +22,10 @@ module MineSweeper
     def update_status
       status.text =
         if cells.any? { |cell| cell.mine? && cell.clicked? }
+          cells.each(&:disable)
           'You lose!'
         elsif cells.all? { |cell| !cell.mine? || (cell.mine? && cell.guessed?) }
+          cells.each(&:disable)
           'You win!'
         else
           count = cells.count(&:mine?) - cells.count(&:guessed?)

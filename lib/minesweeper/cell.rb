@@ -21,6 +21,10 @@ module MineSweeper
       update(board)
     end
 
+    def disable
+      button.state = 'disabled'
+    end
+
     def toggle_mine(board)
       @guessed = !@guessed
       update(board)
