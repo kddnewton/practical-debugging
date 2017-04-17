@@ -17,7 +17,12 @@ module MineSweeper
     def click(board)
       return if clicked?
       @clicked = true
-      neighbors.each { |neighbor| board.click(neighbor) } if !mine? && mine_count.zero?
+
+      if !mine? && mine_count.zero?
+        neighbors.each { |neighbor| board.click(neighbor) }
+        disable
+      end
+
       update(board)
     end
 
