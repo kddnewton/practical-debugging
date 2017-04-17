@@ -39,13 +39,12 @@ module MineSweeper
 
       height.times.flat_map do |ycoord|
         width.times.map do |xcoord|
-          index     = index_for(ycoord, xcoord)
-          neighbors = neighbors_for(ycoord, xcoord)
-          button    = TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
+          index      = index_for(ycoord, xcoord)
+          neighbors  = neighbors_for(ycoord, xcoord)
 
           Cell.new(
             board:      self,
-            button:     button,
+            button:     TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) },
             mine:       predicates[index],
             mine_count: neighbors.count { |neighbor| predicates[neighbor] },
             neighbors:  neighbors

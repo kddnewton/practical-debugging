@@ -9,9 +9,6 @@ module MineSweeper
       @mine       = args[:mine]
       @neighbors  = args[:neighbors]
 
-      @clicked = false
-      @guessed = false
-
       board = args[:board]
       @button.command(-> { click(board) })
       @button.bind('ButtonRelease-2', -> { toggle_mine(board) })
@@ -24,20 +21,20 @@ module MineSweeper
       update(board)
     end
 
-    def display(board)
-      case
-      when guessed                     then 'm'
-      when clicked? && mine?           then 'x'
-      when !mine? && !mine_count.zero? then mine_count
-      end
-    end
-
     def toggle_mine(board)
       @guessed = !@guessed
       update(board)
     end
 
     private
+
+    def display(board)
+      case
+      when guessed?                    then 'm'
+      when clicked? && mine?           then 'x'
+      when !mine? && !mine_count.zero? then mine_count
+      end
+    end
 
     def update(board)
       button.text = display(board).to_s
