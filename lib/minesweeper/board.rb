@@ -9,12 +9,8 @@ module MineSweeper
       @cells  = Array.new(width * height)
     end
 
-    def cell_at(index)
-      cells[index]
-    end
-
-    def click(ycoord, xcoord)
-      cell_at(index_for(ycoord, xcoord)).click(self)
+    def click(index)
+      cells[index].click(self)
     end
 
     def start
@@ -26,12 +22,17 @@ module MineSweeper
 
       height.times do |ycoord|
         width.times do |xcoord|
-          index  = index_for(ycoord, xcoord)
-          cell   = Cell.build_from(predicates, predicates[index], neighbors_for(ycoord, xcoord))
-          button = TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
+          index     = index_for(ycoord, xcoord)
+          neighbors = neighbors_for(ycoord, xcoord)
+          button    = TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
 
-          cell.init(button, self)
-          cells[index] = cell
+          cells[index] = Cell.new(
+            board:      self,
+            button:     button,
+            mine:       predicates[index],
+            mine_count: neighbors.count { |neighbor| predicates[neighbor] },
+            neighbors:  neighbors
+          )
         end
       end
 
@@ -41,10 +42,8 @@ module MineSweeper
     def update_status
       status_label.text =
         if cells.any? { |cell| cell.mine? && cell.clicked? }
-          cells.each(&:disable)
           'You lose!'
         elsif cells.all? { |cell| !cell.mine? || (cell.mine? && cell.guessed?) }
-          cells.each(&:disable)
           'You win!'
         else
           count = cells.count(&:mine?) - cells.count(&:guessed?)
