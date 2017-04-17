@@ -6,7 +6,7 @@ module MineSweeper
       @width  = args[:width]
       @height = args[:height]
       @mines  = args[:mines]
-      @cells  = build_from(args[:mines])
+      @cells  = Array.new(width * height)
     end
 
     def cell_at(index)
@@ -21,10 +21,17 @@ module MineSweeper
       tk_root = TkRoot.new { title 'MineSweeper' }
       @status_label = build_status_label(tk_root)
 
+      predicates = (Array.new(mines, true) +
+                    Array.new(width * height - mines, false)).shuffle
+
       height.times do |ycoord|
         width.times do |xcoord|
+          index  = index_for(ycoord, xcoord)
+          cell   = Cell.build_from(predicates, predicates[index], neighbors_for(ycoord, xcoord))
           button = TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
-          cells[index_for(ycoord, xcoord)].init(button, self)
+
+          cell.init(button, self)
+          cells[index] = cell
         end
       end
 
@@ -54,16 +61,6 @@ module MineSweeper
       TkLabel.new(tk_root) do
         text init_status
         grid(column: 0, row: 0, columnspan: columnspan)
-      end
-    end
-
-    def build_from(mines)
-      predicates = (Array.new(mines, true) +
-                    Array.new(width * height - mines, false)).shuffle
-
-      predicates.map.with_index do |predicate, idx|
-        neighbors = neighbors_for(idx / width, idx % width)
-        Cell.build_from(predicates, predicate, neighbors)
       end
     end
 
