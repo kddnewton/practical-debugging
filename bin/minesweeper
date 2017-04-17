@@ -2,4 +2,6 @@
 
 $LOAD_PATH.unshift(File.expand_path(File.join('..', 'lib'), __dir__))
 require 'minesweeper'
-MineSweeper.start
+
+given  = %i[width height mines].zip(ARGV.map(&:to_i)).to_h.compact
+MineSweeper.start({ width: 20, height: 10, mines: 10 }.merge(given))
