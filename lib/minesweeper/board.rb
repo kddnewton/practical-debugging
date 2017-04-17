@@ -1,61 +1,68 @@
 module MineSweeper
   class Board
-    attr_reader :width, :height, :cells
+    attr_reader :width, :height, :mines, :cells, :status
 
-    def initialize(width, height, mines)
-      @width  = width
-      @height = height
-      @cells  = build_from(mines)
+    def initialize(args = {})
+      @width  = args[:width]
+      @height = args[:height]
+      @mines  = args[:mines]
     end
 
-    def cell_at(index)
-      cells[index]
+    def click(index)
+      cells[index].click(self)
     end
 
-    def click(ycoord, xcoord)
-      cell_at(index_for(ycoord, xcoord)).click(self)
+    def start
+      tk_root = TkRoot.new { title 'MineSweeper' }
+      @cells  = build_cells(tk_root)
+      @status = build_status_label(tk_root)
+      Tk.mainloop
     end
 
-    def display
-      print erase if @displayed
-
-      puts '  ' + (0...width).step(2).map { |file| file % 10 }.to_a.join(' ')
-      puts " +#{'-' * width}+"
-      height.times do |ycoord|
-        print "#{ycoord}|"
-        width.times do |xcoord|
-          print cell_at(index_for(ycoord, xcoord)).display(self)
+    def update_status
+      status.text =
+        if cells.any? { |cell| cell.mine? && cell.clicked? }
+          cells.each(&:disable)
+          'You lose!'
+        elsif cells.all? { |cell| !cell.mine? || (cell.mine? && cell.guessed?) }
+          cells.each(&:disable)
+          'You win!'
+        else
+          count = cells.count(&:mine?) - cells.count(&:guessed?)
+          "#{count} mines left"
         end
-        puts "|#{ycoord}"
-      end
-      puts " +#{'-' * width}+"
-      puts '   ' + (1...width).step(2).map { |file| file % 10 }.to_a.join(' ')
-
-      @displayed = true
-    end
-
-    def toggle_mine(ycoord, xcoord)
-      cell_at(index_for(ycoord, xcoord)).toggle_mine
-    end
-
-    def won?
-      cells.all? { |cell| cell.clicked? || cell.mine? && cell.guessed? }
     end
 
     private
 
-    def build_from(mines)
+    def build_cells(tk_root)
       predicates = (Array.new(mines, true) +
                     Array.new(width * height - mines, false)).shuffle
 
-      predicates.map.with_index do |predicate, idx|
-        neighbors = neighbors_for(idx / width, idx % width)
-        Cell.build_from(predicates, predicate, neighbors)
+      height.times.flat_map do |ycoord|
+        width.times.map do |xcoord|
+          index      = index_for(ycoord, xcoord)
+          neighbors  = neighbors_for(ycoord, xcoord)
+
+          Cell.new(
+            board:      self,
+            button:     TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) },
+            mine:       predicates[index],
+            mine_count: neighbors.count { |neighbor| predicates[neighbor] },
+            neighbors:  neighbors
+          )
+        end
       end
     end
 
-    def erase
-      @erase ||= (height + 5).times.map { "#{`tput cuu1`}#{`tput el`}" }.join
+    def build_status_label(tk_root)
+      init_status = "#{mines} mines left"
+      columnspan  = width
+
+      TkLabel.new(tk_root) do
+        text init_status
+        grid(column: 0, row: 0, columnspan: columnspan)
+      end
     end
 
     def neighbors_for(ycoord, xcoord)

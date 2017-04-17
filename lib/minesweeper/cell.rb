@@ -1,85 +1,53 @@
 module MineSweeper
-  module Cell
-    class BaseCell
-      attr_reader :neighbors, :clicked, :guessed
+  class Cell
+    attr_reader :button, :mine_count, :mine, :neighbors, :clicked, :guessed
+    %i[clicked guessed mine].each { |method| alias_method :"#{method}?", method }
 
-      alias_method :clicked?, :clicked
-      alias_method :guessed?, :guessed
+    def initialize(args = {})
+      @button     = args[:button]
+      @mine_count = args[:mine_count]
+      @mine       = args[:mine]
+      @neighbors  = args[:neighbors]
 
-      def initialize(neighbors = [])
-        @neighbors = neighbors
-        @clicked   = false
-        @guessed   = false
+      board = args[:board]
+      @button.command(-> { click(board) })
+      @button.bind('ButtonRelease-2', -> { toggle_mine(board) })
+    end
+
+    def click(board)
+      return if clicked?
+      @clicked = true
+
+      if !mine? && mine_count.zero?
+        neighbors.each { |neighbor| board.click(neighbor) }
+        disable
       end
 
-      def click(board)
-        return if clicked?
-        @clicked = true
-        after_click(board)
-      end
+      update(board)
+    end
 
-      def display(board)
-        return 'm' if guessed
-        clicked? ? clicked_display(board) : ' '
-      end
+    def disable
+      button.state = 'disabled'
+    end
 
-      def mine?
-        false
-      end
+    def toggle_mine(board)
+      @guessed = !@guessed
+      update(board)
+    end
 
-      def toggle_mine
-        @guessed = !@guessed
+    private
+
+    def display(board)
+      case
+      when guessed?                    then 'm'
+      when clicked? && mine?           then 'x'
+      when !mine? && !mine_count.zero? then mine_count
       end
     end
 
-    class MineCell < BaseCell
-      def mine?
-        true
-      end
-
-      private
-
-      def after_click(_)
-        :lose
-      end
-
-      def clicked_display(_)
-        'X'
-      end
-    end
-
-    class NeighborCell < BaseCell
-      private
-
-      def after_click(_)
-      end
-
-      def clicked_display(board)
-        @clicked_display ||=
-          neighbors.count { |neighbor| board.cell_at(neighbor).mine? }.to_s
-      end
-    end
-
-    class EmptyCell < BaseCell
-      private
-
-      def after_click(board)
-        neighbors.each { |neighbor| board.cell_at(neighbor).click(board) }
-      end
-
-      def clicked_display(_)
-        '.'
-      end
-    end
-
-    def self.build_from(predicates, predicate, neighbors)
-      if predicate
-        MineCell.new(neighbors)
-      elsif neighbors.any? { |neighbor| predicates[neighbor] }
-        NeighborCell.new(neighbors)
-      else
-        EmptyCell.new(neighbors)
-      end
+    def update(board)
+      button.text = display(board).to_s
+      board.update_status
     end
   end
 end
