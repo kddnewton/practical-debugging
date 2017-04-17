@@ -1,10 +1,11 @@
 module MineSweeper
   class Board
-    attr_reader :width, :height, :cells, :status_label
+    attr_reader :width, :height, :mines, :cells, :status_label
 
     def initialize(args = {})
       @width  = args[:width]
       @height = args[:height]
+      @mines  = args[:mines]
       @cells  = build_from(args[:mines])
     end
 
@@ -18,15 +19,7 @@ module MineSweeper
 
     def start
       tk_root = TkRoot.new { title 'MineSweeper' }
-
-      text       = "#{cells.count(&:mine?)} mines left"
-      columnspan = width
-
-      @status_label =
-        TkLabel.new(tk_root) do
-          text text
-          grid(column: 0, row: 0, columnspan: columnspan)
-        end
+      @status_label = build_status_label(tk_root)
 
       height.times do |ycoord|
         width.times do |xcoord|
@@ -53,6 +46,16 @@ module MineSweeper
     end
 
     private
+
+    def build_status_label(tk_root)
+      init_status = "#{mines} mines left"
+      columnspan  = width
+
+      TkLabel.new(tk_root) do
+        text init_status
+        grid(column: 0, row: 0, columnspan: columnspan)
+      end
+    end
 
     def build_from(mines)
       predicates = (Array.new(mines, true) +
