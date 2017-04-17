@@ -1,7 +1,7 @@
 module MineSweeper
   module Cell
     class BaseCell
-      attr_reader :neighbors, :clicked, :guessed
+      attr_reader :neighbors, :clicked, :guessed, :button
 
       alias_method :clicked?, :clicked
       alias_method :guessed?, :guessed
@@ -16,6 +16,13 @@ module MineSweeper
         return if clicked?
         @clicked = true
         after_click(board)
+
+        button.text = display(board)
+        board.update_status
+      end
+
+      def disable
+        button.state = 'disabled'
       end
 
       def display(board)
@@ -23,12 +30,23 @@ module MineSweeper
         clicked? ? clicked_display(board) : ' '
       end
 
+      def init(button, board)
+        left_click = -> { click(board) }
+        right_click = -> { toggle_mine(board) }
+
+        @button = button
+        @button.command(left_click)
+        @button.bind('ButtonRelease-2', right_click)
+      end
+
       def mine?
         false
       end
 
-      def toggle_mine
+      def toggle_mine(board)
         @guessed = !@guessed
+        button.text = display(board)
+        board.update_status
       end
     end
 
@@ -40,7 +58,6 @@ module MineSweeper
       private
 
       def after_click(_)
-        :lose
       end
 
       def clicked_display(_)
@@ -68,7 +85,6 @@ module MineSweeper
       end
 
       def clicked_display(_)
-        '.'
       end
     end
 

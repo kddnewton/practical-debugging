@@ -1,11 +1,11 @@
 module MineSweeper
   class Board
-    attr_reader :width, :height, :cells
+    attr_reader :width, :height, :cells, :status_label
 
-    def initialize(width, height, mines)
-      @width  = width
-      @height = height
-      @cells  = build_from(mines)
+    def initialize(args = {})
+      @width  = args[:width]
+      @height = args[:height]
+      @cells  = build_from(args[:mines])
     end
 
     def cell_at(index)
@@ -16,30 +16,40 @@ module MineSweeper
       cell_at(index_for(ycoord, xcoord)).click(self)
     end
 
-    def display
-      print erase if @displayed
+    def start
+      tk_root = TkRoot.new { title 'MineSweeper' }
 
-      puts '  ' + (0...width).step(2).map { |file| file % 10 }.to_a.join(' ')
-      puts " +#{'-' * width}+"
-      height.times do |ycoord|
-        print "#{ycoord}|"
-        width.times do |xcoord|
-          print cell_at(index_for(ycoord, xcoord)).display(self)
+      text       = "#{cells.count(&:mine?)} mines left"
+      columnspan = width
+
+      @status_label =
+        TkLabel.new(tk_root) do
+          text text
+          grid(column: 0, row: 0, columnspan: columnspan)
         end
-        puts "|#{ycoord}"
+
+      height.times do |ycoord|
+        width.times do |xcoord|
+          button = TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
+          cells[index_for(ycoord, xcoord)].init(button, self)
+        end
       end
-      puts " +#{'-' * width}+"
-      puts '   ' + (1...width).step(2).map { |file| file % 10 }.to_a.join(' ')
 
-      @displayed = true
+      Tk.mainloop
     end
 
-    def toggle_mine(ycoord, xcoord)
-      cell_at(index_for(ycoord, xcoord)).toggle_mine
-    end
-
-    def won?
-      cells.all? { |cell| cell.clicked? || cell.mine? && cell.guessed? }
+    def update_status
+      status_label.text =
+        if cells.any? { |cell| cell.mine? && cell.clicked? }
+          cells.each(&:disable)
+          'You lose!'
+        elsif cells.all? { |cell| !cell.mine? || (cell.mine? && cell.guessed?) }
+          cells.each(&:disable)
+          'You win!'
+        else
+          count = cells.count(&:mine?) - cells.count(&:guessed?)
+          "#{count} mines left"
+        end
     end
 
     private
@@ -52,10 +62,6 @@ module MineSweeper
         neighbors = neighbors_for(idx / width, idx % width)
         Cell.build_from(predicates, predicate, neighbors)
       end
-    end
-
-    def erase
-      @erase ||= (height + 5).times.map { "#{`tput cuu1`}#{`tput el`}" }.join
     end
 
     def neighbors_for(ycoord, xcoord)
