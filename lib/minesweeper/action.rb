@@ -37,8 +37,8 @@ module MineSweeper
 
       case gets.strip.downcase
       when 'q', 'quit', 'exit' then QuitAction.new
-      when /\A(\d+) (\d+)\z/   then ClickAction.new($1.to_i, $2.to_i)
-      when /\Am (\d+) (\d+)\z/ then ToggleMineAction.new($1.to_i, $2.to_i)
+      when /\A(\d+) (\d+)\z/   then ClickAction.new($2.to_i, $1.to_i)
+      when /\Am (\d+) (\d+)\z/ then ToggleMineAction.new($2.to_i, $1.to_i)
       else
         puts 'Could not parse your input, try again.'
         next_action
