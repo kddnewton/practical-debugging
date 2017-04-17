@@ -1,12 +1,11 @@
 module MineSweeper
   class Board
-    attr_reader :width, :height, :mines, :cells, :status_label
+    attr_reader :width, :height, :mines, :cells, :status
 
     def initialize(args = {})
       @width  = args[:width]
       @height = args[:height]
       @mines  = args[:mines]
-      @cells  = Array.new(width * height)
     end
 
     def click(index)
@@ -15,32 +14,13 @@ module MineSweeper
 
     def start
       tk_root = TkRoot.new { title 'MineSweeper' }
-      @status_label = build_status_label(tk_root)
-
-      predicates = (Array.new(mines, true) +
-                    Array.new(width * height - mines, false)).shuffle
-
-      height.times do |ycoord|
-        width.times do |xcoord|
-          index     = index_for(ycoord, xcoord)
-          neighbors = neighbors_for(ycoord, xcoord)
-          button    = TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
-
-          cells[index] = Cell.new(
-            board:      self,
-            button:     button,
-            mine:       predicates[index],
-            mine_count: neighbors.count { |neighbor| predicates[neighbor] },
-            neighbors:  neighbors
-          )
-        end
-      end
-
+      @cells  = build_cells(tk_root)
+      @status = build_status_label(tk_root)
       Tk.mainloop
     end
 
     def update_status
-      status_label.text =
+      status.text =
         if cells.any? { |cell| cell.mine? && cell.clicked? }
           'You lose!'
         elsif cells.all? { |cell| !cell.mine? || (cell.mine? && cell.guessed?) }
@@ -52,6 +32,27 @@ module MineSweeper
     end
 
     private
+
+    def build_cells(tk_root)
+      predicates = (Array.new(mines, true) +
+                    Array.new(width * height - mines, false)).shuffle
+
+      height.times.flat_map do |ycoord|
+        width.times.map do |xcoord|
+          index     = index_for(ycoord, xcoord)
+          neighbors = neighbors_for(ycoord, xcoord)
+          button    = TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
+
+          Cell.new(
+            board:      self,
+            button:     button,
+            mine:       predicates[index],
+            mine_count: neighbors.count { |neighbor| predicates[neighbor] },
+            neighbors:  neighbors
+          )
+        end
+      end
+    end
 
     def build_status_label(tk_root)
       init_status = "#{mines} mines left"
