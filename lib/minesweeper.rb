@@ -1,4 +1,5 @@
 require 'tk'
+require 'minesweeper/after_click'
 require 'minesweeper/board'
 require 'minesweeper/cell'
 

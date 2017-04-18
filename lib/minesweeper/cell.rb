@@ -1,16 +1,18 @@
 module MineSweeper
   class Cell
-    attr_reader :button, :mine_count, :mine, :neighbors, :clicked, :guessed
+    attr_reader :button, :mine_count, :neighbors, :after_click
 
     %i[clicked guessed mine].each do |method|
+      attr_reader method
       alias_method :"#{method}?", method
     end
 
     def initialize(args = {})
-      @button     = args[:button]
-      @mine_count = args[:mine_count]
-      @mine       = args[:mine]
-      @neighbors  = args[:neighbors]
+      @button      = args[:button]
+      @mine_count  = args[:mine_count]
+      @mine        = args[:mine]
+      @neighbors   = args[:neighbors]
+      @after_click = AfterClick.for(self)
 
       board = args[:board]
       @button.command(-> { click(board) })
@@ -20,12 +22,7 @@ module MineSweeper
     def click(board)
       return if clicked?
       @clicked = true
-
-      if !mine? && mine_count.zero?
-        neighbors.each { |neighbor| board.click(neighbor) }
-        disable
-      end
-
+      after_click.perform(board)
       update(board)
     end
 
