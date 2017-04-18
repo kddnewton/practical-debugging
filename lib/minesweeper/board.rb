@@ -28,7 +28,7 @@ module MineSweeper
           cells.each(&:disable)
           'You win!'
         else
-          count = cells.count(&:mine?) - cells.count(&:guessed?)
+          count = mines - cells.count(&:guessed?)
           "#{count} mines left"
         end
     end
