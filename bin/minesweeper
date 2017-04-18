@@ -2,4 +2,6 @@
 
 $LOAD_PATH.unshift(File.expand_path(File.join('..', 'lib'), __dir__))
 require 'minesweeper'
-MineSweeper.start(%i[width height mines].zip(ARGV.map(&:to_i)).to_h.compact)
+
+args = %i[width height mines].zip(ARGV.grep(/\A\d+\z/).map(&:to_i)).to_h.compact
+MineSweeper.start(args)
