@@ -5,8 +5,3 @@ def puts_constants(constant)
   end
 end
 puts_constants(MineSweeper)
-
-class FooBar
-  Cell = ::MineSweeper::AfterClick::EmptyCell
-end
-puts_constants(FooBar)
