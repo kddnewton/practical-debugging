@@ -59,12 +59,12 @@ module MineSweeper
     end
 
     def build_status_label(tk_root)
-      init_status = "#{mines} mines left"
-      columnspan  = width
+      initial_status = "#{mines} mines left"
+      column_span    = width
 
       TkLabel.new(tk_root) do
-        text init_status
-        grid(column: 0, row: 0, columnspan: columnspan)
+        text initial_status
+        grid(column: 0, row: 0, columnspan: column_span)
       end
     end
 
