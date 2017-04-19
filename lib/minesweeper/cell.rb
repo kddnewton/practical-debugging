@@ -22,7 +22,7 @@ module MineSweeper
       return if clicked?
       @clicked = true
 
-      if !cell.mine? && cell.mine_count.zero?
+      if !mine? && mine_count.zero?
         neighbors.each { |neighbor| board.click(neighbor) }
         disable
       end
