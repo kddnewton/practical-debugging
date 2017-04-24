@@ -4,12 +4,12 @@ Identify the type of problem you're facing by determining which question you're 
 
 ## Interface problems
 
-Occurring when you don’t understand the dependent structure of methods or constants.
+Interface problems occur when you don’t understand the dependent structure of methods or constants.
 
 *Questions like:*
 
 - Why is this thing nil?
-- Why can't I call the method I want?
+- Why can’t I call the method I want?
 - What are the constants I can reference?
 - What can this object see and do?
 - What is this gem doing?
@@ -43,12 +43,13 @@ Occurring when you don’t understand the dependent structure of methods or cons
 
 ## State problems
 
-Occurring when the assumptions you made about the current state of the program are incorrect.
+State problems occur when the assumptions you made about the current state of the program are incorrect.
 
 *Questions like:*
 
 - How does this value change at this point?
 - What has been initialized at this point?
+- How many objects are allocated in this method?
 
 *Questions to ask yourself:*
 
@@ -69,7 +70,7 @@ Occurring when the assumptions you made about the current state of the program a
 
 ## Flow problems
 
-Occurring when you don’t know how the ruby interpreter go to or left a location in code and its associated state.
+Flow problems occur when you don’t know how the ruby interpreter go to or left a location in code and its associated state.
 
 *Questions like:*
 
@@ -81,7 +82,7 @@ Occurring when you don’t know how the ruby interpreter go to or left a locatio
 
 *Questions to ask yourself:*
 
-- 
+- What am I assuming has happened or is going to happen next?
 
 *Tools and methods to use:*
 
