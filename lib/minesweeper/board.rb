@@ -24,7 +24,8 @@ module MineSweeper
         if cells.any? { |cell| cell.mine? && cell.clicked? }
           cells.each(&:disable)
           'You lose!'
-        elsif cells.all? { |cell| !cell.mine? || (cell.mine? && cell.guessed?) }
+        elsif cells.all? { |cell| !cell.mine? ||
+                                  (cell.mine? && cell.guessed?) }
           cells.each(&:disable)
           'You win!'
         else
@@ -45,7 +46,9 @@ module MineSweeper
           neighbors  = neighbors_for(ycoord, xcoord)
 
           button =
-            TkButton.new(tk_root) { grid(column: xcoord, row: ycoord + 1) }
+            TkButton.new(tk_root) do
+              grid(column: xcoord, row: ycoord + 1)
+            end
 
           Cell.new(
             board:      self,
