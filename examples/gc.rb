@@ -1,14 +1,18 @@
-GCRuns =
-  Struct.new(:minor, :major) do
-    def self.build
-      new(*GC.stat.values_at(:minor_gc_count, :major_gc_count))
-    end
-
-    def -(other)
-      new(minor - other.minor, major - other.major)
-    end
+Status = Struct.new(:text)
+Button =
+  Struct.new(:foobar) do
+    def command(*) end
+    def bind(*) end
   end
 
-GC.start
+board = MineSweeper::Board.new(mines: 10)
+board.instance_eval do
+  @status = Status.new
+  @cells  = [
+    MineSweeper::Cell.new(mine: true, button: Button.new)
+  ]
+end
 
-
+before = GC.stat[:total_allocated_objects]
+10_000.times { board.update_status }
+puts GC.stat[:total_allocated_objects] - before
