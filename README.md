@@ -97,6 +97,16 @@ Flow problems occur when you don’t know how the ruby interpreter got to or lef
   - [ObjectSpace](http://ruby-doc.org/core-2.4.1/ObjectSpace.html)
   - [Object#freeze](http://ruby-doc.org/core-2.4.1/Object.html#method-i-freeze)
 
+## References
+
+- [A Comprehensive Guide to Debugging Rails](https://www.jackkinsella.ie/articles/a-comprehensive-guide-to-debugging-rails)
+- [Debugging memory leaks in Ruby](https://samsaffron.com/archive/2015/03/31/debugging-memory-leaks-in-ruby)
+- [Debugging Rails Applications](http://guides.rubyonrails.org/debugging_rails_applications.html)
+- [Debugging Rails Applications in Development](http://nofail.de/2013/10/debugging-rails-applications-in-development/)
+- [I am a puts debuggerer](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html)
+- [Ruby Debugging Magic Cheat Sheet](http://www.schneems.com/2016/01/25/ruby-debugging-magic-cheat-sheet.html)
+- [There’s More to Ruby Debugging Than puts()](https://engineering.shopify.com/17489080-theres-more-to-ruby-debugging-than-puts)
+
 ## Code examples
 
 For `minesweeper`, run `bundle install` in the root of the repository to fetch the dependencies. Then run `bin/minesweeper` to run the program. The number of rows, columns, and mines can be specified as command line arguments in that order.
