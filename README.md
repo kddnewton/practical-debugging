@@ -68,6 +68,7 @@ State problems occur when the assumptions you made about the current state of th
   - [Object#inspect](http://ruby-doc.org/core-2.4.1/Object.html#method-i-inspect)
   - [Kernel#p](http://ruby-doc.org/core-2.4.1/Kernel.html#method-i-p)
   - [Binding#irb](http://ruby-doc.org/core-2.4.1/Binding.html#method-i-irb)
+  - [GC::stat](https://ruby-doc.org/core-2.4.1/GC.html#method-c-stat)
 
 ## Flow problems
 
