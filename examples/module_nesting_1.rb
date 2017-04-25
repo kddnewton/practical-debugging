@@ -1,15 +1,15 @@
-module Blog
-  module Post
+module MineSweeper
+  module Cell
     class Base
     end
   end
 
-  class Post::Draft < Base
+  class Cell::Mine < Base
   end
 
-  class Post::InReview < Base
+  class Cell::Neighbor < Base
   end
 
-  class Post::Published < Base
+  class Cell::Empty < Base
   end
 end

@@ -1,15 +1,17 @@
-module Blog
-  module Post
+module MineSweeper
+  module Cell
     class Base
     end
 
-    class Draft < Base
+    puts Module.nesting; exit
+
+    class Mine < Base
     end
 
-    class InReview < Base
+    class Neighbor < Base
     end
 
-    class Published < Base
+    class Empty < Base
     end
   end
 end
