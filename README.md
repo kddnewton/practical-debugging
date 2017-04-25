@@ -72,7 +72,7 @@ State problems occur when the assumptions you made about the current state of th
 
 ## Flow problems
 
-Flow problems occur when you don’t know how the ruby interpreter go to or left a location in code and its associated state.
+Flow problems occur when you don’t know how the ruby interpreter got to or left a location in code and its associated state.
 
 *Questions like:*
 
