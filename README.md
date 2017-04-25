@@ -23,23 +23,23 @@ Interface problems occur when you don’t understand the dependent structure of 
 *Tools and methods to use:*
 
 - Listing methods:
-  - Object#methods
-  - Object#instance_methods
-  - Object#private_instance_methods
+  - [Object#methods](http://ruby-doc.org/core-2.4.1/Object.html#method-i-methods)
+  - [Module#instance_methods](http://ruby-doc.org/core-2.4.1/Module.html#method-i-instance_methods)
+  - [Module#private_instance_methods](http://ruby-doc.org/core-2.4.1/Module.html#method-i-private_instance_methods)
 - Inspecting methods:
-  - Object#method
-  - Object#instance_method
-  - Method#source_location
-  - Method#parameters
+  - [Object#method](http://ruby-doc.org/core-2.4.1/Object.html#method-i-method)
+  - [Module#instance_method](http://ruby-doc.org/core-2.4.1/Module.html#method-i-instance_method)
+  - [Method#source_location](http://ruby-doc.org/core-2.4.1/Method.html#method-i-source_location)
+  - [Method#parameters](http://ruby-doc.org/core-2.4.1/Method.html#method-i-parameters)
 - Constants:
-  - Module::nesting
-  - Module#constants
-  - Module#get_const
+  - [Module::nesting](http://ruby-doc.org/core-2.4.1/Module.html#method-c-nesting)
+  - [Module#constants](http://ruby-doc.org/core-2.4.1/Module.html#method-i-constants)
+  - [Module#const_get](http://ruby-doc.org/core-2.4.1/Module.html#method-i-const_get)
 
 *Command line utilities to use:*
 
-- `bundle open` (opens the source of gems in your editor)
-- `gem pristine` (restores gems to their original state)
+- [`bundle open`](http://bundler.io/v1.1/bundle_open.html) (opens the source of gems in your editor)
+- [`gem pristine`](http://guides.rubygems.org/command-reference/#gem-pristine) (restores gems to their original state)
 
 ## State problems
 
@@ -58,15 +58,16 @@ State problems occur when the assumptions you made about the current state of th
 *Tools and methods to use:*
 
 - Variables:
-  - Kernel#local_variables
-  - Kernel#instance_variables
-  - Kernel#instance_variable_get
-  - Kernel#instance_variable_set
-  - Kernel#global_variables
+  - [Kernel#local_variables](http://ruby-doc.org/core-2.4.1/Kernel.html#method-i-local_variables)
+  - [Object#instance_variables](http://ruby-doc.org/core-2.4.1/Object.html#method-i-instance_variables)
+  - [Object#instance_variable_get](http://ruby-doc.org/core-2.4.1/Object.html#method-i-instance_variable_get)
+  - [Object#instance_variable_set](http://ruby-doc.org/core-2.4.1/Object.html#method-i-instance_variable_set)
+  - [Kernel#global_variables](http://ruby-doc.org/core-2.4.1/Kernel.html#method-i-global_variables)
 - State:
-  - Kernel#puts
-  - Object#inspect
-  - Binding#irb
+  - [Kernel#puts](http://ruby-doc.org/core-2.4.1/Kernel.html#method-i-puts)
+  - [Object#inspect](http://ruby-doc.org/core-2.4.1/Object.html#method-i-inspect)
+  - [Kernel#p](http://ruby-doc.org/core-2.4.1/Kernel.html#method-i-p)
+  - [Binding#irb](http://ruby-doc.org/core-2.4.1/Binding.html#method-i-irb)
 
 ## Flow problems
 
@@ -87,13 +88,13 @@ Flow problems occur when you don’t know how the ruby interpreter go to or left
 *Tools and methods to use:*
 
 - Interpreter location:
-  - Kernel#caller
-  - TracePoint module
-  - Binding#eval
+  - [Kernel#caller](http://ruby-doc.org/core-2.4.1/Kernel.html#method-i-caller)
+  - [TracePoint](http://ruby-doc.org/core-2.4.1/TracePoint.html)
+  - [Kernel#set_trace_func](http://ruby-doc.org/core-2.4.1/Kernel.html#method-i-set_trace_func)
+  - [Binding#eval](http://ruby-doc.org/core-2.4.1/Binding.html#method-i-eval)
 - Object lifecycle:
-  - ObjectSpace module
-  - Object#freeze
-  - Object#unfreeze
+  - [ObjectSpace](http://ruby-doc.org/core-2.4.1/ObjectSpace.html)
+  - [Object#freeze](http://ruby-doc.org/core-2.4.1/Object.html#method-i-freeze)
 
 ## Code examples
 
