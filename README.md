@@ -1,4 +1,4 @@
-# Debugging
+# Practical debugging
 
 Identify the type of problem you're facing by determining which question you're asking. Follow the techniques below.
 
