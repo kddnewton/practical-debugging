@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    tk (0.1.2)
+    tk (0.2.0)
 
 PLATFORMS
   ruby
@@ -10,4 +10,4 @@ DEPENDENCIES
   tk
 
 BUNDLED WITH
-   1.14.6
+   1.16.0
